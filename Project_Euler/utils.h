@@ -22,4 +22,24 @@ public:
     }
 };
 
+bool isPrime_SqrtN(long long int num) {
+    if(num < 2) return 0;
+    for(int i = 2; i * i <= num; ++i) {
+        if(num % i == 0) return false;
+    }
+    return true;
+}
+
+bool isPalindromic(long long int num) {
+    long long int tmp = num;
+    long long int rev = 0LL;
+    do {
+        long long int d = tmp % 10;
+        if(rev) rev *= 10;
+        rev += d;
+        tmp /= 10;
+    } while(tmp);
+    return rev == num;
+}
+
 #endif
