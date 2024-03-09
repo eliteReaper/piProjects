@@ -8,6 +8,9 @@ using namespace std;
 class Timer {
     chrono::time_point<chrono::high_resolution_clock> startTime;
 public:
+    Timer() {
+        startTime = chrono::high_resolution_clock::now();
+    }
     void start() {
         startTime = chrono::high_resolution_clock::now();
     }
