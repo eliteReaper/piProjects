@@ -3,22 +3,21 @@
 
 #include<bits/stdc++.h>
 #include <chrono>
-using namespace std;
 
 class Timer {
-    chrono::time_point<chrono::high_resolution_clock> startTime;
+    std::chrono::time_point<std::chrono::high_resolution_clock> startTime;
 public:
     Timer() {
-        startTime = chrono::high_resolution_clock::now();
+        startTime = std::chrono::high_resolution_clock::now();
     }
     void start() {
-        startTime = chrono::high_resolution_clock::now();
+        startTime = std::chrono::high_resolution_clock::now();
     }
     void elapsed() {
         // Assuming start() was called.
-        auto endTime = chrono::high_resolution_clock::now();
-        chrono::duration<double, milli> elapsed = endTime - startTime;
-        cout << "Time taken: " << elapsed.count() << " milliseconds\n";
+        auto endTime = std::chrono::high_resolution_clock::now();
+        std::chrono::duration<double, std::milli> elapsed = endTime - startTime;
+        std::cout << "Time taken: " << elapsed.count() << " milliseconds\n";
     }
 };
 
@@ -40,6 +39,26 @@ bool isPalindromic(long long int num) {
         tmp /= 10;
     } while(tmp);
     return rev == num;
+}
+
+std::vector<bool> sieve_of_eratosthenes(long long int n) {
+    // Create a boolean array to store prime number information
+    std::vector<bool> is_prime(n + 1, true);
+
+    // 0 and 1 are not prime
+    is_prime[0] = is_prime[1] = false;
+
+    // Optimization: Only iterate up to the square root of n
+    for (long long int i = 2; i * i <= n; i++) {
+        if (is_prime[i]) {
+            // Mark all multiples of i as non-prime
+            for (long long int j = i * i; j <= n; j += i) {
+                is_prime[j] = false;
+            }
+        }
+    }
+
+    return is_prime;
 }
 
 #endif

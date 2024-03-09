@@ -1,4 +1,5 @@
 #include"utils.h"
+using namespace std;
 
 int main() {
     Timer timer;
