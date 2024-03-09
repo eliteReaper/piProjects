@@ -1,0 +1,2 @@
+# Multiplication of prime numbers raised to their greatest power but <= 20.
+print(16 * 9 * 5 * 7 * 11 * 13 * 17 * 19)

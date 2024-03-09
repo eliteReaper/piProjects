@@ -4,4 +4,4 @@ run:
 	./${f}.out
 	make clean
 clean:
-	rm ./*.out
+	rm ~/Documents/Projects/Project_Euler/*.out
