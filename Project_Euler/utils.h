@@ -4,6 +4,7 @@
 #include<bits/stdc++.h>
 #include <chrono>
 
+// ---------------- UTILS ----------------
 class Timer {
     std::chrono::time_point<std::chrono::high_resolution_clock> startTime;
 public:
@@ -21,6 +22,8 @@ public:
     }
 };
 
+// ---------------- FUNCTIONS ----------------
+// Returns if number is a prime in O(sqrt(num)).
 bool isPrime_SqrtN(long long int num) {
     if(num < 2) return 0;
     for(int i = 2; i * i <= num; ++i) {
@@ -29,6 +32,8 @@ bool isPrime_SqrtN(long long int num) {
     return true;
 }
 
+// Returns true if number is palindromic, that is reads the same from
+// front as from the back.
 bool isPalindromic(long long int num) {
     long long int tmp = num;
     long long int rev = 0LL;
@@ -41,6 +46,7 @@ bool isPalindromic(long long int num) {
     return rev == num;
 }
 
+// Generate Sieve of Erastoshenes upto a given number N.
 std::vector<bool> sieve_of_eratosthenes(long long int n) {
     // Create a boolean array to store prime number information
     std::vector<bool> is_prime(n + 1, true);
@@ -60,5 +66,8 @@ std::vector<bool> sieve_of_eratosthenes(long long int n) {
 
     return is_prime;
 }
+
+// ---------------- GENERATORS ----------------
+long long int triangularNumberGenerator()
 
 #endif
