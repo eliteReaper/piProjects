@@ -11,7 +11,6 @@ while true; do
     rm ./log.txt
     python3 ./internet_analyzer.py
     echo "Clearing artifacts..."
-    rm ./connected_devices
     rm ./current_speed.csv
     echo "Done"
     sleep 10 # seconds
