@@ -1,1 +1,3 @@
 Basic Internet Analyzer does two things, logs which ip addresses are on your network and tells you your current download speed.
+
+To operate just run ./internet_analyzer.sh
