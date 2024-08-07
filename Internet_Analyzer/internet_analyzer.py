@@ -26,7 +26,7 @@ with open('log.txt', 'a') as output:
     line_to_write += ', '
     for metrics in speed_metrics:
         for metric in metrics:
-            line_to_write += (str(metric) + ' Mbps')
+            line_to_write += (str(metric) + ' MBps')
     line_to_write += '\n'
     output.write(line_to_write)
     
