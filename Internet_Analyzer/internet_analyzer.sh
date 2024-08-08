@@ -15,5 +15,5 @@ while true; do
     echo "Clearing artifacts..."
     echo "Plotting & Saving Speed Test Graph.."
     python3 plotter.py
-    sleep 3 # seconds
+    sleep 10 # seconds
 done
