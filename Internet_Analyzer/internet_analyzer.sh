@@ -1,6 +1,8 @@
 #!/bin/bash
 
 rm ./log.txt
+rm ./current_speed.csv
+rm ./connected_devices
 while true; do
     echo "Finding connected devices..."
     arp -a > connected_devices
@@ -11,7 +13,7 @@ while true; do
     echo "Analyzing speedtest results..."
     python3 ./internet_analyzer.py
     echo "Clearing artifacts..."
-    rm ./current_speed.csv
-    echo "Done"
-    sleep 10 # seconds
+    echo "Plotting & Saving Speed Test Graph.."
+    python3 plotter.py
+    sleep 3 # seconds
 done
