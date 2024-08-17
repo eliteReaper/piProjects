@@ -3,3 +3,6 @@ Internet_Analyzer/log.txt
 Internet_Analyzer/current_speed.csv
 Internet_Analyzer/connected_devices
 Internet_Analyzer/speed_graph.png
+
+# Sea Nav
+Sea_Nav/venv/*
