@@ -1,3 +1,7 @@
+# Extra
+.venv
+.vscode
+
 # Internet Analyzer
 Internet_Analyzer/log.txt
 Internet_Analyzer/current_speed.csv
