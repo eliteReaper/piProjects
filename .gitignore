@@ -12,8 +12,10 @@ Internet_Analyzer/speed_graph.png
 Sea_Nav/venv/*
 Sea_Nav/data/*
 
-#OptimumHolidaysForYear
+# OptimumHolidaysForYear
 OptimumHolidaysForYear/solver_app
 OptimumHolidaysForYear/*.out
 OptimumHolidaysForYear/headers/*.out
 OptimumHolidaysForYear/source/*.out
+
+# RecipeHelper
