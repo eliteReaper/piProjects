@@ -1,0 +1,33 @@
+<div class="add-new-recipe-form">
+    <mat-form-field>
+        <mat-label>Recipe name</mat-label>
+        <input matInput [formControl]="newRecipeForm.controls.name" />
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>Ingredients</mat-label>
+        <input matInput />
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>Servings</mat-label>
+        <input matInput [formControl]="newRecipeForm.controls.servings"/>
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>Category</mat-label>
+        <mat-select>
+        @if((recipeCategoriesAndLabels | async); as recipeCategoriesAndLabels) {
+            @for(categoryAndLabel of recipeCategoriesAndLabels; track categoryAndLabel) {
+                <mat-option [value]="categoryAndLabel.category">{{categoryAndLabel.label}}</mat-option>
+            }
+        }
+        </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>Steps to follow</mat-label>
+        <textarea matInput [formControl]="newRecipeForm.controls.steps"></textarea>
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>Tags (comma seperated)</mat-label>
+        <input matInput [formControl]="newRecipeForm.controls.tags"/>
+    </mat-form-field>
+    <button mat-flat-button (click)="addNewRecipe()">Add Recipe</button>
+</div>

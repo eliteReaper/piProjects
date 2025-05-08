@@ -1,0 +1,20 @@
+<div class="ingredient-viewer">
+    <h3>Ingredients Gallery</h3>
+    <div class="ingredient-viewer-gallery">
+        @if(showIngredients | async; as ingredients) {
+            @for(ingredient of ingredients; track ingredient) {
+                <ingredient-card 
+                    ingredientId="{{ingredient.ingredientId}}"
+                    name="{{ingredient.name}}" 
+                    category="{{ingredient.category}}"
+                    [tags]="ingredient.tags || []"
+                ></ingredient-card>
+            }
+            <div class="gallery-button">
+                <button mat-flat-button> View All </button>
+            </div>
+        } @else {
+            <p>Loading ingredients...</p>
+        }
+    </div>
+</div>

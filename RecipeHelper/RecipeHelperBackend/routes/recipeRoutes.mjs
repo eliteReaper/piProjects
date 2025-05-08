@@ -1,13 +1,14 @@
 import express from "express";
 import { Success, SomethingWentWrong } from "../shared/utils.mjs";
-import { addNewRecipe, getRecipe } from "./services/recipeHelperServices.mjs";
+import { addNewRecipe, getRecipe, getRecipeCategoriesAndLabels } from "./services/recipeHelperServices.mjs";
 import { logger } from "../shared/logger.mjs";
 
 const recipeRouter = express.Router();
 
 recipeRouter.post("/addNewRecipe", async (req, res, next) => {
   try {
-    const { name, ingredientsRequiredIds, steps, servings, category, tags } = req.body;
+    const { name, ingredientsRequiredIds, steps, servings, category, tags } =
+      req.body;
     if (!name || !ingredientsRequiredIds || !steps || !servings) {
       return BadRequest(
         res,
@@ -32,16 +33,27 @@ recipeRouter.post("/addNewRecipe", async (req, res, next) => {
 });
 
 recipeRouter.post("/getRecipe", async (req, res, next) => {
-    try {
-      const { name } = req.body;
-      
-      const recipesFetched = await getRecipe(name);
-  
-      return Success(res, recipesFetched, "Recipes fetched.");
-    } catch (err) {
-      logger.error("Something went wrong %s", err);
-      return SomethingWentWrong(res);
-    }
-  });
+  try {
+    const { name } = req.body;
+
+    const recipesFetched = await getRecipe(name);
+
+    return Success(res, recipesFetched, "Recipes fetched.");
+  } catch (err) {
+    logger.error("Something went wrong %s", err);
+    return SomethingWentWrong(res);
+  }
+});
+
+recipeRouter.post("/getRecipeCategoriesAndLabels", async (req, res, next) => {
+  try {
+    const recipeCategories = await getRecipeCategoriesAndLabels();
+
+    return Success(res, recipeCategories, "Recipe Categories Fetched");
+  } catch (err) {
+    logger.error("Something went wrong %s", err);
+    return SomethingWentWrong(res);
+  }
+})
 
 export { recipeRouter };

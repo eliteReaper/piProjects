@@ -1,5 +1,5 @@
 import express from "express";
-import { Success, SomethingWentWrong } from "../shared/utils.mjs";
+import { Success, SomethingWentWrong, BadRequest } from "../shared/utils.mjs";
 import {
   getIngredients,
   addNewIngredient,
@@ -29,11 +29,9 @@ ingredientRouter.post("/addNewIngredient", async (req, res, next) => {
 ingredientRouter.post("/getIngredient", async (req, res, next) => {
   try {
     const { id, name } = req.body;
-    if (!id && !name) {
-      return BadRequest(res, "Id or name is required.");
-    }
 
     const ingredientsFetched = await getIngredients(id, name);
+    
     return Success(res, ingredientsFetched, "Fetched Ingredients.");
   } catch (err) {
     logger.error("Something went wrong %s", err);

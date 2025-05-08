@@ -1,0 +1,16 @@
+.ingredient-viewer {
+  padding: 1rem;
+}
+
+.ingredient-viewer-gallery {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.gallery-button {
+  margin-top: 2rem;
+  border-radius: 1px solid black;
+}
+

@@ -19,7 +19,6 @@ const logger = winston.createLogger({
         new winston.transports.File({ filename: 'combined.log', level: 'debug' }),
     ],
     exceptionHandlers: [
-        new winston.transports.Console(),
         new winston.transports.File({ filename: 'exceptions.log' })
     ],
     exitOnError: false

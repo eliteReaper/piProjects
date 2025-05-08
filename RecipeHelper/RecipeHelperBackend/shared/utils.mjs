@@ -22,7 +22,7 @@ const SomethingWentWrong = (res, msg = "Something Went Wrong") => {
 };
 
 const Success = (res, payload = {}, msg = "Success") => {
-  logger.info("Success, Message: %s, Payload %s", msg, JSON.stringify(payload));
+  logger.info("Success, Message: %s", msg);
   return res.status(200).json({
     message: msg,
     flag: 1,

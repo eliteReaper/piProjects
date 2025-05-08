@@ -1,0 +1,14 @@
+<mat-card class="ingredient-card" appearance="outlined">
+  <mat-card-header>
+    <mat-card-title>{{name()}}</mat-card-title>
+  </mat-card-header>
+  <mat-card-footer class="ingredient-card-footer">
+    <mat-chip-set aria-label="Ingredient tags">
+      @if(tags().length > 0) { 
+        @for(tag of tags(); track tag) {
+          <mat-chip>{{tag}}</mat-chip>
+        } 
+      }
+    </mat-chip-set>
+  </mat-card-footer>
+</mat-card>

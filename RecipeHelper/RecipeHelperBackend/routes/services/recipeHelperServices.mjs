@@ -3,7 +3,7 @@ import {
   Ingredient,
   supportedCategories as supportedIngredientCategories,
 } from "../../models/ingredient.mjs";
-import { Recipe, supportedRecipeCategories } from "../../models/recipe.mjs";
+import { Recipe, supportedRecipeCategoriesAndLabel } from "../../models/recipe.mjs";
 
 // -------------------- Ingredient Services ------------------------
 const addNewIngredient = async (name, category, tags) => {
@@ -50,9 +50,6 @@ const addNewRecipe = async (
   category,
   tags
 ) => {
-  if (supportedRecipeCategories.findIndex(category.toUpperCase()) === -1) {
-    throw new Error("Category not supported.");
-  }
   const newRecipe = new Recipe({
     recipeId: randomBytes(16).toString("hex"),
     name,
@@ -73,10 +70,15 @@ const getRecipe = async (name) => {
   return await Recipe.find({});
 };
 
+const getRecipeCategoriesAndLabels = async () => {
+  return supportedRecipeCategoriesAndLabel;
+}
+
 export {
   addNewIngredient,
   getIngredients,
   seedAllIngredients,
   addNewRecipe,
   getRecipe,
+  getRecipeCategoriesAndLabels,
 };
