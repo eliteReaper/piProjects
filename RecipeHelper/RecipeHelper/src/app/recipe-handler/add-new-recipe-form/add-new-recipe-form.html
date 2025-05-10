@@ -5,15 +5,54 @@
     </mat-form-field>
     <mat-form-field>
         <mat-label>Ingredients</mat-label>
-        <input matInput />
+        <!-- <mat-chip-grid #chipGrid>
+            @for (ingredient of ingredientsSelected(); track $index) {
+                <mat-chip-row (removed)="removeIngredient(ingredient)">
+                    {{ingredient.label}}
+                    <button matChipRemove>
+                        <mat-icon>cancel</mat-icon>
+                    </button>
+                </mat-chip-row>
+            }
+        </mat-chip-grid> -->
+        <input 
+            matInput
+            #ingredientInput
+            [formControl]="newRecipeForm.controls.ingredient" 
+            [matAutocomplete]="ingredientAutoComplete"
+            />
+        <mat-autocomplete 
+            autoActiveFirstOption
+            #ingredientAutoComplete="matAutocomplete" 
+            (optionSelected)="selectIngredient($event); ingredientInput.value = ''">
+            @for (option of (filteredIngredientsAndLabels | async); track option) {
+                <mat-option [value]="option.label" [id]="option.id">{{option.label}}</mat-option>
+            }
+        </mat-autocomplete>
     </mat-form-field>
+    @if(ingredientsSelected().length > 0) {
+            @for(ingredient of ingredientsSelected(); track $index) {
+                <mat-form-field class="ingredient-input">
+                    <mat-label>{{ingredient.label}} Quantity</mat-label>
+                    <input 
+                        matInput
+                        [formControl]="newRecipeForm.controls.ingredientQuantity.controls.at($index)!"/>
+                    <button 
+                        mat-icon-button 
+                        matSuffix
+                        (click)="removeIngredient(ingredient)">
+                            <mat-icon>close</mat-icon>
+                    </button>
+                </mat-form-field>
+            }
+    }
     <mat-form-field>
         <mat-label>Servings</mat-label>
         <input matInput [formControl]="newRecipeForm.controls.servings"/>
     </mat-form-field>
     <mat-form-field>
         <mat-label>Category</mat-label>
-        <mat-select>
+        <mat-select [formControl]="newRecipeForm.controls.category">
         @if((recipeCategoriesAndLabels | async); as recipeCategoriesAndLabels) {
             @for(categoryAndLabel of recipeCategoriesAndLabels; track categoryAndLabel) {
                 <mat-option [value]="categoryAndLabel.category">{{categoryAndLabel.label}}</mat-option>

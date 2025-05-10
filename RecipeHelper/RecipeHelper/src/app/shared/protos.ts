@@ -5,10 +5,16 @@ export interface Ingredient {
   tags?: string[];
 }
 
+interface IngredientRequired {
+  id: string;
+  quantity: number;
+  unit: string;
+}
+
 export interface Recipe {
-  recipeId: string;
+  recipeId?: string;
   name: string;
-  ingredientsRequiredIds: string[];
+  ingredientsRequired: IngredientRequired[];
   steps: string[];
   servings: number;
   category: string;

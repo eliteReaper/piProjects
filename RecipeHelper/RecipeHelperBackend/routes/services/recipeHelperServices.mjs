@@ -3,7 +3,10 @@ import {
   Ingredient,
   supportedCategories as supportedIngredientCategories,
 } from "../../models/ingredient.mjs";
-import { Recipe, supportedRecipeCategoriesAndLabel } from "../../models/recipe.mjs";
+import {
+  Recipe,
+  supportedRecipeCategoriesAndLabel,
+} from "../../models/recipe.mjs";
 
 // -------------------- Ingredient Services ------------------------
 const addNewIngredient = async (name, category, tags) => {
@@ -44,16 +47,17 @@ const seedAllIngredients = async (ingredients) => {
 // -------------------- Recipe Services ------------------------
 const addNewRecipe = async (
   name,
-  ingredientsRequiredIds,
+  ingredientsRequired,
   steps,
   servings,
   category,
   tags
 ) => {
+  // TODO: Validate ingredientsRequired ids and category also.
   const newRecipe = new Recipe({
     recipeId: randomBytes(16).toString("hex"),
     name,
-    ingredientsRequiredIds,
+    ingredientsRequired,
     steps,
     servings,
     category: category.toUpperCase(),
@@ -72,7 +76,7 @@ const getRecipe = async (name) => {
 
 const getRecipeCategoriesAndLabels = async () => {
   return supportedRecipeCategoriesAndLabel;
-}
+};
 
 export {
   addNewIngredient,

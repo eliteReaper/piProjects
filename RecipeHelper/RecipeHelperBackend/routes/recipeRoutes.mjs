@@ -1,5 +1,5 @@
 import express from "express";
-import { Success, SomethingWentWrong } from "../shared/utils.mjs";
+import { Success, SomethingWentWrong, BadRequest } from "../shared/utils.mjs";
 import { addNewRecipe, getRecipe, getRecipeCategoriesAndLabels } from "./services/recipeHelperServices.mjs";
 import { logger } from "../shared/logger.mjs";
 
@@ -7,18 +7,18 @@ const recipeRouter = express.Router();
 
 recipeRouter.post("/addNewRecipe", async (req, res, next) => {
   try {
-    const { name, ingredientsRequiredIds, steps, servings, category, tags } =
+    const { name, ingredientsRequired, steps, servings, category, tags } =
       req.body;
-    if (!name || !ingredientsRequiredIds || !steps || !servings) {
+    if (!name || !ingredientsRequired || !steps || !servings || !category) {
       return BadRequest(
         res,
-        "Name, Ingredients Required, Servings and Steps are required."
+        "Name, Ingredients Required, Servings, Steps and Category are required."
       );
     }
 
     const newRecipeAdded = await addNewRecipe(
       name,
-      ingredientsRequiredIds,
+      ingredientsRequired,
       steps,
       servings,
       category,

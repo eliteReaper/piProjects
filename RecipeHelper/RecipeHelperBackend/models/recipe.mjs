@@ -53,8 +53,8 @@ const Schema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  ingredientsRequiredIds: {
-    type: [String],
+  ingredientsRequired: {
+    type: [{ id: String, quantity: Number, unit: String }],
     required: true,
   },
   steps: {
