@@ -1,0 +1,18 @@
+@if((allRecipes | async) ?? false; as allRecipes) {
+    @if(allRecipes.length > 0) { 
+        <mat-grid-list [cols]="gridColsSignal()" [rowHeight]="rowHeightSignal()">
+            @for(recipe of allRecipes; track $index) {
+                <mat-grid-tile
+                    class="recipe-card-grid-tile">
+                    <recipe-card 
+                        [recipe]="recipe">
+                    </recipe-card>
+                </mat-grid-tile>
+            }
+        </mat-grid-list>
+    } @else {
+        <p>So empty, please add some recipes.</p>
+    }
+} @else {
+    <p>Loading Recipes...</p>
+}

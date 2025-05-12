@@ -45,6 +45,29 @@ const seedAllIngredients = async (ingredients) => {
 };
 
 // -------------------- Recipe Services ------------------------
+const updateRecipe = async (
+  recipeId,
+  name,
+  ingredientsRequired,
+  steps,
+  servings,
+  category,
+  tags
+) => {
+  return await Recipe.findOneAndUpdate(
+    { recipeId },
+    {
+      name,
+      ingredientsRequired,
+      steps,
+      servings,
+      category,
+      tags,
+    },
+    { new: true }
+  );
+};
+
 const addNewRecipe = async (
   name,
   ingredientsRequired,
@@ -85,4 +108,5 @@ export {
   addNewRecipe,
   getRecipe,
   getRecipeCategoriesAndLabels,
+  updateRecipe,
 };

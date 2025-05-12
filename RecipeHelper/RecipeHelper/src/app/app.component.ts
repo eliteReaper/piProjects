@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IngredientViewer } from './ingredient-viewer/ingredient-viewer';
 import { RecipeHandler } from "./recipe-handler/recipe-handler";
 
+
 @Component({
   selector: 'app-root',
   imports: [IngredientViewer, RecipeHandler],

@@ -5,3 +5,12 @@
 .ingredient-card-footer {
   padding: 16px;
 }
+
+.ingredient-name-rank {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+}

@@ -3,6 +3,7 @@ import {
   Component,
   computed,
   inject,
+  input,
   model,
   OnInit,
   signal,
@@ -39,6 +40,7 @@ import {
 } from '@angular/material/autocomplete';
 import { MatChipInputEvent, MatChipsModule } from '@angular/material/chips';
 import { toObservable } from '@angular/core/rxjs-interop';
+import { PrimaryDataStore } from '../../data-store/primary-data-store';
 
 interface IngredientIdLabel {
   id: string;
@@ -74,9 +76,34 @@ interface NewRecipeFormControl {
   templateUrl: './add-new-recipe-form.html',
   styleUrl: './add-new-recipe-form.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
-})
-export class AddNewRecipeForm {
-  private recipeService: RecipeService = inject(RecipeService);
+}) // TODO: Change name of AddNewRecipeForm to something that encapsulate both add and edit recipe form.
+export class AddNewRecipeForm implements OnInit {
+  recipe = input<Recipe>();
+  isEditMode = model<boolean>(false);
+
+  ngOnInit(): void {
+    if (this.recipe()) {
+      this.isEditMode.set(true);
+      this.newRecipeForm.controls.name.setValue(this.recipe()!.name);
+      this.newRecipeForm.controls.steps.setValue(this.recipe()!.steps[0]);
+      this.newRecipeForm.controls.servings.setValue(this.recipe()!.servings);
+      this.newRecipeForm.controls.category.setValue(this.recipe()!.category);
+      this.newRecipeForm.controls.tags.setValue(
+        this.recipe()?.tags?.join(', ') ?? ''
+      );
+      this.recipe()!.ingredientsRequired.forEach((ingredient) => {
+        this.selectIngredientFromInput(
+          ingredient.id,
+          ingredient.label,
+          ingredient.quantity,
+          ingredient.unit
+        );
+      });
+    }
+  }
+
+  private dataStore = inject(PrimaryDataStore);
+  private recipeService = inject(RecipeService);
   private ingredientSerivce: IngredientService = inject(IngredientService);
 
   protected readonly separatorKeysCodes: number[] = [ENTER, COMMA];
@@ -162,6 +189,26 @@ export class AddNewRecipeForm {
     event.option.deselect();
   }
 
+  selectIngredientFromInput(
+    id: string,
+    label: string,
+    quantity: number,
+    unit: string
+  ): void {
+    this.newRecipeForm.controls.ingredient.setValue('');
+    this.ingredientsSelected.update((ingredients) => [
+      ...ingredients,
+      {
+        id,
+        label,
+        controlIdx: this.newRecipeForm.controls.ingredientQuantity.length,
+      },
+    ]);
+    this.newRecipeForm.controls.ingredientQuantity.push(
+      new FormControl<string>(quantity.toString() + unit, { nonNullable: true })
+    );
+  }
+
   removeIngredient(ingredient: IngredientIdLabel): void {
     this.ingredientsSelected.update((ingredients) => {
       const index = ingredients.indexOf(ingredient);
@@ -184,6 +231,7 @@ export class AddNewRecipeForm {
       ingredientsRequired: this.ingredientsSelected().map((ingredient) => {
         return {
           id: ingredient.id,
+          label: ingredient.label,
           quantity: this.extractQuantityFromIngredientInput(
             this.newRecipeForm.controls.ingredientQuantity.at(
               ingredient.controlIdx!
@@ -205,10 +253,16 @@ export class AddNewRecipeForm {
         .map((tag) => tag.trim()),
     };
 
-    // TODO: Create an effect for this and snack bar.
-    this.recipeService.addRecipe(newRecipe).subscribe();
-    this.newRecipeForm.reset();
-    this.ingredientsSelected.set([]);
+    if (this.isEditMode()) {
+      this.dataStore.editRecipe({
+        recipeId: this.recipe()!.recipeId,
+        ...newRecipe,
+      });
+    } else {
+      this.dataStore.addNewRecipe(newRecipe);
+      this.newRecipeForm.reset();
+      this.ingredientsSelected.set([]);
+    }
   }
 
   private extractQuantityFromIngredientInput(inputValue: string): number {

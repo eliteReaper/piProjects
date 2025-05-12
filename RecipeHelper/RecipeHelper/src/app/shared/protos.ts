@@ -7,6 +7,7 @@ export interface Ingredient {
 
 interface IngredientRequired {
   id: string;
+  label: string;
   quantity: number;
   unit: string;
 }

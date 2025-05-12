@@ -54,7 +54,7 @@ const Schema = new mongoose.Schema({
     required: true,
   },
   ingredientsRequired: {
-    type: [{ id: String, quantity: Number, unit: String }],
+    type: [{ id: String, label: String, quantity: Number, unit: String }],
     required: true,
   },
   steps: {

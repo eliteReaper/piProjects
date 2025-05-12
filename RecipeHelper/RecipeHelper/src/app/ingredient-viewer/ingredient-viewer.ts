@@ -15,12 +15,14 @@ import { IngredientService } from '../services/ingredient-services';
 import { AsyncPipe } from '@angular/common';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDivider } from '@angular/material/divider';
 
 @Component({
   selector: 'ingredient-viewer',
   standalone: true,
   imports: [
     AsyncPipe,
+    MatDivider,
     IngredientCard,
     MatButtonModule,
     MatCardModule,

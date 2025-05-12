@@ -68,5 +68,7 @@
         <mat-label>Tags (comma seperated)</mat-label>
         <input matInput [formControl]="newRecipeForm.controls.tags"/>
     </mat-form-field>
-    <button mat-flat-button (click)="addNewRecipe()">Add Recipe</button>
+    <button mat-flat-button (click)="addNewRecipe()">
+        {{isEditMode() ? 'Edit' : 'Add'}} Recipe
+    </button>
 </div>

@@ -1,16 +1,25 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  signal,
+} from '@angular/core';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { AddNewRecipeForm } from './add-new-recipe-form/add-new-recipe-form';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import {MatExpansionModule} from '@angular/material/expansion';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { RecipeGallery } from './recipe-gallery/recipe-gallery';
+import { MatDividerModule } from '@angular/material/divider';
+import { PrimaryDataStore } from '../data-store/primary-data-store';
 
 @Component({
   selector: 'recipe-handler',
   standalone: true,
   imports: [
+    MatDividerModule,
     MatExpansionModule,
     MatButtonModule,
     MatIconModule,
@@ -18,11 +27,18 @@ import {MatExpansionModule} from '@angular/material/expansion';
     MatInputModule,
     MatFormFieldModule,
     AddNewRecipeForm,
+    RecipeGallery,
   ],
   templateUrl: './recipe-handler.html',
   styleUrl: './recipe-handler.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RecipeHandler {
-    readonly panelOpenState = signal(false);
+  private dataStore = inject(PrimaryDataStore);
+
+  readonly panelOpenState = signal(false);
+
+  refreshRecipes() {
+    this.dataStore.loadAllRecipes({});
+  }
 }

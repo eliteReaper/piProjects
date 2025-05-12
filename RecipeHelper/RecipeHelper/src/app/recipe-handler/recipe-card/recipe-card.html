@@ -1,0 +1,42 @@
+@if(recipe(); as recipe) {
+    <div class="recipe-card">
+        <div class="recipe-card-header">
+            <h3>{{recipe.name}}</h3>
+            <div> 
+                <mat-form-field appearance="outline" class="servings-input">
+                    <mat-label>Servings</mat-label>
+                    <input matInput type="text" [formControl]="servingsControl"/>
+                </mat-form-field>
+                <button
+                    mat-icon-button
+                    matSuffix
+                    (click)="resetServingsValue()">
+                    <mat-icon>refresh</mat-icon>
+                </button>
+                <button 
+                    mat-icon-button
+                    (click)="openRecipe()">
+                    <mat-icon>edit</mat-icon>
+                </button>
+            </div>
+        </div>
+        @for(ingredient of recipe.ingredientsRequired.slice(0, ingredientsNumberCutOff); track ingredient) {
+            <mat-chip>
+                {{ingredient.label}}: {{(ingredient.quantity  * servingMultiplier()) | number}} {{ingredient.unit}}
+            </mat-chip>
+        }
+        <p>
+            {{recipe.steps.at(0)?.slice(0, stepsCharacterCutOff)}}
+            @if((recipe.steps.at(0)?.length ?? 0) > stepsCharacterCutOff) {
+                <span>...</span>
+            }
+        </p>
+        <mat-chip-set>
+            @for(tag of recipe.tags?.slice(0, tagsNumberCutOff); track tag) {
+                <mat-chip>{{tag}}</mat-chip>
+            }
+        </mat-chip-set>
+    </div>
+} @else {
+    <p>Loading recipe...</p>
+}
