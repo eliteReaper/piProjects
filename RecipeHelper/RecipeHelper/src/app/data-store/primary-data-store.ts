@@ -36,6 +36,15 @@ export class PrimaryDataStore extends ComponentStore<State> {
     })
   );
 
+  readonly removeOneRecipe = this.updater(
+    (state: State, recipeToRemove: Recipe | null) => ({
+      ...state,
+      recipesLoaded: state.recipesLoaded.filter(
+        (recipe) => recipe.recipeId !== recipeToRemove?.recipeId
+      ),
+    })
+  );
+
   readonly updateSingleRecipe = this.updater(
     (state: State, recipeToUpdate: Recipe | null) => ({
       ...state,
@@ -92,6 +101,24 @@ export class PrimaryDataStore extends ComponentStore<State> {
             duration: 2000,
           });
           this.updateSingleRecipe(response.at(0)!);
+        }
+      })
+    )
+  );
+
+  readonly removeRecipe = this.effect((request: Observable<string>) =>
+    request.pipe(
+      switchMap((request: string) => {
+        return this.recipeService.removeRecipe(request);
+      }),
+      tap((response: Recipe[]) => {
+        if (response.length > 0) {
+          this.removeOneRecipe(response.at(0)!);
+          this.snackbar.open(
+            `Recipe ${response.at(0)?.name} has been removed`,
+            'Ok',
+            { duration: 2000 }
+          );
         }
       })
     )

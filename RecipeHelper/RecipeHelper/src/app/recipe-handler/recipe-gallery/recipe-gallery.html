@@ -1,7 +1,13 @@
-@if((allRecipes | async) ?? false; as allRecipes) {
-    @if(allRecipes.length > 0) { 
-        <mat-grid-list [cols]="gridColsSignal()" [rowHeight]="rowHeightSignal()">
-            @for(recipe of allRecipes; track $index) {
+<mat-form-field appearance="outline" class="recipe-search-field">
+    <mat-label>Search Recipe</mat-label>
+    <input 
+        matInput
+        [formControl]="recipeSearchFormControl"/>
+</mat-form-field>
+@if((filteredRecipes | async) ?? false; as filteredRecipes) {
+    @if(filteredRecipes.length > 0) { 
+        <mat-grid-list [cols]="gridColsSignal()" [rowHeight]="rowHeightSignal()" gutterSize="0.2rem">
+            @for(recipe of filteredRecipes; track recipe) {
                 <mat-grid-tile
                     class="recipe-card-grid-tile">
                     <recipe-card 

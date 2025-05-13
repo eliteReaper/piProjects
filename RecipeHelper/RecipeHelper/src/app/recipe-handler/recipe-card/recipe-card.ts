@@ -22,6 +22,7 @@ import { DecimalPipe } from '@angular/common';
 import { MatListModule } from '@angular/material/list';
 import { MatDialog } from '@angular/material/dialog';
 import { RecipeViewDialog } from '../recipe-view-dialog/recipe-view-dialog';
+import { PrimaryDataStore } from '../../data-store/primary-data-store';
 
 @Component({
   selector: 'recipe-card',
@@ -47,6 +48,7 @@ export class RecipeCard implements OnInit {
   readonly recipe = input<Recipe>();
 
   private readonly dialog = inject(MatDialog);
+  private readonly dataStore = inject(PrimaryDataStore);
 
   protected readonly stepsCharacterCutOff = 30;
   protected readonly ingredientsNumberCutOff = 7;
@@ -92,5 +94,9 @@ export class RecipeCard implements OnInit {
       .subscribe(() => {
             this.updateServingsValue(this.recipe()?.servings ?? 0);
       });
+  }
+
+  removeRecipe() {
+    this.dataStore.removeRecipe(this.recipe()?.recipeId ?? "");
   }
 }

@@ -7,7 +7,7 @@ import {
   Signal,
   signal,
 } from '@angular/core';
-import { map, Observable } from 'rxjs';
+import { combineLatest, debounceTime, map, Observable, startWith } from 'rxjs';
 import { Recipe } from '../../shared/protos';
 import { AsyncPipe } from '@angular/common';
 import { RecipeCard } from '../recipe-card/recipe-card';
@@ -20,10 +20,11 @@ import {
 } from '@angular/cdk/layout';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { MatRippleModule } from '@angular/material/core';
-import { MatDialog } from '@angular/material/dialog';
-import { RecipeViewDialog } from '../recipe-view-dialog/recipe-view-dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 enum ScreenSize {
   XSMALL = 1,
@@ -43,6 +44,10 @@ enum ScreenSize {
     MatGridListModule,
     RecipeCard,
     MatRippleModule,
+    FormsModule,
+    MatInputModule,
+    MatFormFieldModule,
+    ReactiveFormsModule,
   ],
   templateUrl: './recipe-gallery.html',
   styleUrl: './recipe-gallery.scss',
@@ -50,7 +55,6 @@ enum ScreenSize {
 })
 export class RecipeGallery implements OnInit {
   private dataStore = inject(PrimaryDataStore);
-  private dialog = inject(MatDialog);
 
   private readonly breakpointObserver = inject(BreakpointObserver);
 
@@ -97,7 +101,7 @@ export class RecipeGallery implements OnInit {
       case ScreenSize.MEDIUM:
         return 2;
       default:
-        return 3;
+        return 2;
     }
   });
 
@@ -116,9 +120,28 @@ export class RecipeGallery implements OnInit {
     }
   });
 
+  recipeSearchFormControl = new FormControl<string>('', { nonNullable: true });
+
   ngOnInit() {
     this.dataStore.loadAllRecipes({});
   }
 
   protected allRecipes: Observable<Recipe[]> = this.dataStore.recipesLoaded;
+
+  protected filteredRecipes: Observable<Recipe[]> = combineLatest([
+    this.allRecipes,
+    this.recipeSearchFormControl.valueChanges.pipe(startWith(''), debounceTime(100)),
+  ]).pipe(
+    map(([allRecipes, recipeSearchText]) => {
+      if (recipeSearchText) {
+        return allRecipes.filter(
+          (recipe) =>
+            recipe.name
+              .toLowerCase()
+              .indexOf(recipeSearchText.toLowerCase()) !== -1
+        );
+      }
+      return allRecipes;
+    })
+  );
 }

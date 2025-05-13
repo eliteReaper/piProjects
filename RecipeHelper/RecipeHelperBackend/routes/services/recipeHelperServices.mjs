@@ -45,6 +45,10 @@ const seedAllIngredients = async (ingredients) => {
 };
 
 // -------------------- Recipe Services ------------------------
+const removeRecipe = async (recipeId) => {
+  return await Recipe.findOneAndDelete( {recipeId} );
+};
+
 const updateRecipe = async (
   recipeId,
   name,
@@ -109,4 +113,5 @@ export {
   getRecipe,
   getRecipeCategoriesAndLabels,
   updateRecipe,
+  removeRecipe,
 };

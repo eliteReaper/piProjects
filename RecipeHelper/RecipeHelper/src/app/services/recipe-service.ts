@@ -9,6 +9,24 @@ import { Recipe, ServerResponse, CategoryAndLabel } from '../shared/protos';
 export class RecipeService {
   private httpClient = inject(HttpClient);
 
+  removeRecipe(recipeId: string) : Observable<Recipe[]> {
+    return this.httpClient
+    .post<ServerResponse<Recipe[]>>(
+      'http://localhost:3000/removeRecipe',
+      {recipeId}
+    )
+    .pipe(
+      map((res: ServerResponse<Recipe[]>) => {
+        console.log(res.payload);
+        return res.payload;
+      }),
+      catchError((err: HttpErrorResponse) => {
+        // TODO: Find some way to show this error using Http Interceptors.
+        throw err;
+      })
+    );
+  }
+
   editRecipe(recipe: Recipe): Observable<Recipe[]> {
     return this.httpClient
       .post<ServerResponse<Recipe[]>>(

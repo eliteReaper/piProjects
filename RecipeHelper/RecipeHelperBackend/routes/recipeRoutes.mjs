@@ -1,9 +1,27 @@
 import express from "express";
 import { Success, SomethingWentWrong, BadRequest } from "../shared/utils.mjs";
-import { addNewRecipe, getRecipe, getRecipeCategoriesAndLabels, updateRecipe } from "./services/recipeHelperServices.mjs";
+import { addNewRecipe, getRecipe, getRecipeCategoriesAndLabels, updateRecipe, removeRecipe } from "./services/recipeHelperServices.mjs";
 import { logger } from "../shared/logger.mjs";
 
 const recipeRouter = express.Router();
+
+
+recipeRouter.post("/removeRecipe", async (req, res, next) => {
+  try {
+    const { recipeId } = req.body;
+
+    if(!recipeId) {
+      return BadRequest('Recipe Indentifier is missing');
+    }
+
+    const removedRecipe = await removeRecipe(recipeId);
+
+    return Success(res, [removedRecipe], "Recipe removed successfully");
+  } catch (err) {
+    logger.error("Something went wrong %s", err);
+    return SomethingWentWrong(res);
+  }
+});
 
 recipeRouter.post("/updateRecipe", async (req, res, next) => {
   try {

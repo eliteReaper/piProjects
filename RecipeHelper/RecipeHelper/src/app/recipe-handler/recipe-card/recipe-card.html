@@ -18,6 +18,11 @@
                     (click)="openRecipe()">
                     <mat-icon>edit</mat-icon>
                 </button>
+                <button 
+                    mat-icon-button
+                    (click)="removeRecipe()">
+                    <mat-icon>delete</mat-icon>
+                </button>
             </div>
         </div>
         @for(ingredient of recipe.ingredientsRequired.slice(0, ingredientsNumberCutOff); track ingredient) {
