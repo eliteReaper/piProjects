@@ -6,6 +6,7 @@ import {
   input,
   model,
   OnInit,
+  output,
   signal,
 } from '@angular/core';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
@@ -15,6 +16,7 @@ import {
   FormsModule,
   ReactiveFormsModule,
   FormArray,
+  Validators,
 } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
@@ -80,6 +82,8 @@ interface NewRecipeFormControl {
 export class AddNewRecipeForm implements OnInit {
   recipe = input<Recipe>();
   isEditMode = model<boolean>(false);
+  onEditClose = output<void>();
+  onAddCollapseForm = output<void>();
 
   ngOnInit(): void {
     if (this.recipe()) {
@@ -110,14 +114,29 @@ export class AddNewRecipeForm implements OnInit {
 
   protected newRecipeForm: FormGroup<NewRecipeFormControl> =
     new FormGroup<NewRecipeFormControl>({
-      name: new FormControl<string>('', { nonNullable: true }),
+      name: new FormControl<string>('', {
+        nonNullable: true,
+        validators: [Validators.required],
+      }),
       ingredient: new FormControl<string>('', {
         nonNullable: true,
+        validators: [Validators.required],
       }),
-      ingredientQuantity: new FormArray<FormControl<string>>([]),
-      steps: new FormControl<string>('', { nonNullable: true }),
-      servings: new FormControl<number>(0, { nonNullable: true }),
-      category: new FormControl<string>('', { nonNullable: true }),
+      ingredientQuantity: new FormArray<FormControl<string>>([], {
+        validators: [Validators.required],
+      }),
+      steps: new FormControl<string>('', {
+        nonNullable: true,
+        validators: [Validators.required],
+      }),
+      servings: new FormControl<number>(0, {
+        nonNullable: true,
+        validators: [Validators.required],
+      }),
+      category: new FormControl<string>('', {
+        nonNullable: true,
+        validators: [Validators.required],
+      }),
       tags: new FormControl<string>('', { nonNullable: true }),
     });
 
@@ -152,23 +171,23 @@ export class AddNewRecipeForm implements OnInit {
         ingredientInputValueChanges,
         ingredientsSelected,
       ]) => {
-        if (!ingredientInputValueChanges) {
-          return allIngredientsAndLabels;
-        }
-        return allIngredientsAndLabels
-          .filter(
-            (ingredientAndLabel) =>
-              ingredientAndLabel.label
-                .toLowerCase()
-                .indexOf(ingredientInputValueChanges.toLowerCase()) !== -1
-          )
-          .filter(
+        const allIngredientsWithSelectedFiltered =
+          allIngredientsAndLabels.filter(
             (ingredientAndLabel) =>
               ingredientsSelected.findIndex(
                 (ingredientSelected) =>
                   ingredientAndLabel.id === ingredientSelected.id
               ) === -1
           );
+        if (!ingredientInputValueChanges) {
+          return allIngredientsWithSelectedFiltered;
+        }
+        return allIngredientsWithSelectedFiltered.filter(
+          (ingredientAndLabel) =>
+            ingredientAndLabel.label
+              .toLowerCase()
+              .indexOf(ingredientInputValueChanges.toLowerCase()) !== -1
+        );
       }
     )
   );
@@ -184,7 +203,10 @@ export class AddNewRecipeForm implements OnInit {
       },
     ]);
     this.newRecipeForm.controls.ingredientQuantity.push(
-      new FormControl<string>('0', { nonNullable: true })
+      new FormControl<string>('0', {
+        nonNullable: true,
+        validators: [Validators.required],
+      })
     );
     event.option.deselect();
   }
@@ -210,19 +232,21 @@ export class AddNewRecipeForm implements OnInit {
   }
 
   removeIngredient(ingredient: IngredientIdLabel): void {
-    this.ingredientsSelected.update((ingredients) => {
-      const index = ingredients.indexOf(ingredient);
-      if (index < 0) {
-        return ingredients;
-      }
-      ingredients.splice(index, 1);
-      return [...ingredients];
-    });
-    if (ingredient.controlIdx) {
+    if ((ingredient?.controlIdx ?? -1) >= 0) {
       this.newRecipeForm.controls.ingredientQuantity.removeAt(
-        ingredient.controlIdx
+        ingredient.controlIdx!
       );
     }
+    this.ingredientsSelected.update((ingredients) => {
+      return ingredients
+        .filter((ingredientSelected) => ingredientSelected.id !== ingredient.id)
+        .map((ingredientSelected, idx) => {
+          return {
+            ...ingredientSelected,
+            controlIdx: idx,
+          };
+        });
+    });
   }
 
   addNewRecipe() {
@@ -258,10 +282,14 @@ export class AddNewRecipeForm implements OnInit {
         recipeId: this.recipe()!.recipeId,
         ...newRecipe,
       });
+      this.onEditClose.emit();
     } else {
       this.dataStore.addNewRecipe(newRecipe);
       this.newRecipeForm.reset();
       this.ingredientsSelected.set([]);
+      // TODO: Only collapse when there are no form errors.
+      // this.newRecipeForm.controls.name.hasError('required') like so.
+      this.onAddCollapseForm.emit();
     }
   }
 

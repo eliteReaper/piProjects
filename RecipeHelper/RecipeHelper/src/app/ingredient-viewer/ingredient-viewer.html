@@ -8,6 +8,7 @@
                     name="{{ingredient.name}}" 
                     category="{{ingredient.category}}"
                     [tags]="ingredient.tags || []"
+                    [countOfRecipesUsedIn]="ingredient.countOfRecipesUsedIn"
                 ></ingredient-card>
             }
         } @else {

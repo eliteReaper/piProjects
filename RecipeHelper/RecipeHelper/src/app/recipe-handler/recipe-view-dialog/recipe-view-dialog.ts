@@ -6,6 +6,7 @@ import {
   MatDialogContent,
   MatDialogTitle,
   MAT_DIALOG_DATA,
+  MatDialogRef,
 } from '@angular/material/dialog';
 import { Recipe } from '../../shared/protos';
 import { AddNewRecipeForm } from '../add-new-recipe-form/add-new-recipe-form';
@@ -26,4 +27,9 @@ import { REACTIVE_NODE } from '@angular/core/primitives/signals';
 })
 export class RecipeViewDialog {
   data: Recipe = inject(MAT_DIALOG_DATA);
+  dialogRef: MatDialogRef<RecipeViewDialog> | null = inject(MatDialogRef<RecipeViewDialog>);
+
+  onEditClose() {
+    this.dialogRef?.close();
+  }
 }

@@ -18,14 +18,15 @@
         </div>
         <div class="add-new-recipe">
             <mat-accordion>
-                <mat-expansion-panel  
+                <mat-expansion-panel
+                    [expanded]="panelOpenState()"
                     (opened)="panelOpenState.set(true)" 
                     (closed)="panelOpenState.set(false)">
                         <mat-expansion-panel-header>
                         <mat-panel-title> Add New Recipe </mat-panel-title>
                         <mat-panel-description> Click for Instructions </mat-panel-description>
                         </mat-expansion-panel-header>
-                        <add-new-recipe-form></add-new-recipe-form>
+                        <add-new-recipe-form (onAddCollapseForm)="onAddCollapseForm()"></add-new-recipe-form>
                 </mat-expansion-panel>
             </mat-accordion>
         </div>

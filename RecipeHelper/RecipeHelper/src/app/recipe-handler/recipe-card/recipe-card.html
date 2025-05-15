@@ -1,7 +1,7 @@
 @if(recipe(); as recipe) {
     <div class="recipe-card">
         <div class="recipe-card-header">
-            <h3>{{recipe.name}}</h3>
+            <h3 class="recipe-card-title">{{recipe.name}}</h3>
             <div> 
                 <mat-form-field appearance="outline" class="servings-input">
                     <mat-label>Servings</mat-label>
@@ -25,17 +25,21 @@
                 </button>
             </div>
         </div>
-        @for(ingredient of recipe.ingredientsRequired.slice(0, ingredientsNumberCutOff); track ingredient) {
-            <mat-chip>
-                {{ingredient.label}}: {{(ingredient.quantity  * servingMultiplier()) | number}} {{ingredient.unit}}
-            </mat-chip>
-        }
-        <p>
+        <mat-chip-set>
+            @for(ingredient of recipe.ingredientsRequired.slice(0, ingredientsNumberCutOff); track ingredient) {
+                <mat-chip>
+                    {{ingredient.label}}: {{(ingredient.quantity  * servingMultiplier()) | number}} {{ingredient.unit}}
+                </mat-chip>
+            }
+        </mat-chip-set>
+        <p class="recipe-card-steps">
+            <strong>Steps</strong><br>
             {{recipe.steps.at(0)?.slice(0, stepsCharacterCutOff)}}
             @if((recipe.steps.at(0)?.length ?? 0) > stepsCharacterCutOff) {
                 <span>...</span>
             }
         </p>
+        Tags:
         <mat-chip-set>
             @for(tag of recipe.tags?.slice(0, tagsNumberCutOff); track tag) {
                 <mat-chip>{{tag}}</mat-chip>

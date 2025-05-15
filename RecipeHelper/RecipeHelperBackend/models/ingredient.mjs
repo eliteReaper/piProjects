@@ -35,6 +35,10 @@ const Schema = new mongoose.Schema({
     type: [String],
     default: [],
   },
+  countOfRecipesUsedIn: {
+    type: Number,
+    default: 0,
+  }
 });
 
 const Ingredient = mongoose.model("Ingredient", Schema);

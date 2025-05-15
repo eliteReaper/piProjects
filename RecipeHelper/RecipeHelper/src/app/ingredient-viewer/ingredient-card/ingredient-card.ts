@@ -17,4 +17,5 @@ export class IngredientCard {
   name = input<string>("");
   category = input<string>("");
   tags = input<string[]>([]);
+  countOfRecipesUsedIn = input<number>(0);
 }

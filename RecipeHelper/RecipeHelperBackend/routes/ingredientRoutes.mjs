@@ -43,6 +43,7 @@ ingredientRouter.post("/getIngredient", async (req, res, next) => {
 ingredientRouter.post("/seedAllIngredients", async (req, res, next) => {
   try {
     await seedAllIngredients(ingredientsToBeSeeded);
+    return Success(res, "Ingredients seeded successfully.");
   } catch (err) {
     logger.error("Something went wrong %s", err);
     return SomethingWentWrong(res);

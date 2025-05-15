@@ -41,4 +41,8 @@ export class RecipeHandler {
   refreshRecipes() {
     this.dataStore.loadAllRecipes({});
   }
+
+  onAddCollapseForm() {
+    this.panelOpenState.set(false);
+  }
 }

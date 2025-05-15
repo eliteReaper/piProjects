@@ -2,6 +2,7 @@ export interface Ingredient {
   ingredientId: string;
   name: string;
   category: string;
+  countOfRecipesUsedIn: number;
   tags?: string[];
 }
 

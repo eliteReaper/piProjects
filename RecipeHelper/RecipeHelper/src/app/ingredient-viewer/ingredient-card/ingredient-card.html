@@ -1,7 +1,7 @@
 <mat-card class="ingredient-card" appearance="outlined">
   <mat-card-header>
     <mat-card-title>{{name()}}</mat-card-title>
-    <mat-card-subtitle>6 recipes use it</mat-card-subtitle>
+    <mat-card-subtitle>{{countOfRecipesUsedIn()}} recipes use it</mat-card-subtitle>
   </mat-card-header>
   <mat-card-footer class="ingredient-card-footer">
     <mat-chip-set aria-label="Ingredient tags">

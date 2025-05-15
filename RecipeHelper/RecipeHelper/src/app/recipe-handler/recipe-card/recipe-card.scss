@@ -18,3 +18,19 @@
     justify-content: space-between;
     align-items: center;
 }
+
+.recipe-card-steps {
+    border: 1px solid black;
+    padding: 1rem;
+    border-radius: 0.5rem;
+}
+
+.recipe-card-title {
+    border: 1px solid black;
+    padding: 1rem;
+    border-radius: 0.5rem;
+}
+
+.servings-input {
+    max-width: 8rem;
+}

@@ -1,6 +1,6 @@
 <h2 mat-dialog-title>View/Edit Recipe</h2>
 <mat-dialog-content>
-  <add-new-recipe-form [recipe]="data"></add-new-recipe-form>
+  <add-new-recipe-form [recipe]="data" (onEditClose)="onEditClose()"></add-new-recipe-form>
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-button mat-dialog-close>Close</button>

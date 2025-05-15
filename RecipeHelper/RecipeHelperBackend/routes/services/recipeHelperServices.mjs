@@ -7,6 +7,8 @@ import {
   Recipe,
   supportedRecipeCategoriesAndLabel,
 } from "../../models/recipe.mjs";
+import mongoose from "mongoose";
+import { logger } from "../../shared/logger.mjs";
 
 // -------------------- Ingredient Services ------------------------
 const addNewIngredient = async (name, category, tags) => {
@@ -58,18 +60,39 @@ const updateRecipe = async (
   category,
   tags
 ) => {
-  return await Recipe.findOneAndUpdate(
-    { recipeId },
-    {
-      name,
-      ingredientsRequired,
-      steps,
-      servings,
-      category,
-      tags,
-    },
-    { new: true }
-  );
+  const session = await mongoose.startSession();
+  session.startTransaction();
+  try {
+    const foundRecipe = await Recipe.findOne({ recipeId });
+    const originalIngredients = foundRecipe.ingredientsRequired;
+    console.log(foundRecipe);
+    await decrementIngredientCountsFor(originalIngredients);
+
+    await incrementIngredientCountsFor(ingredientsRequired);
+
+    const updatedRecipe = await Recipe.findOneAndUpdate(
+      { recipeId },
+      {
+        name,
+        ingredientsRequired,
+        steps,
+        servings,
+        category,
+        tags,
+      },
+      { new: true }
+    );
+
+    session.commitTransaction();
+
+    return updatedRecipe;
+  } catch (error) {
+    await session.abortTransaction();
+    logger.error("Error while updating recipe: %s", error);
+    throw error;
+  } finally {
+    session.endSession();
+  }
 };
 
 const addNewRecipe = async (
@@ -81,17 +104,32 @@ const addNewRecipe = async (
   tags
 ) => {
   // TODO: Validate ingredientsRequired ids and category also.
-  const newRecipe = new Recipe({
-    recipeId: randomBytes(16).toString("hex"),
-    name,
-    ingredientsRequired,
-    steps,
-    servings,
-    category: category.toUpperCase(),
-    tags: tags ?? [],
-  });
 
-  return await newRecipe.save();
+  const session = await mongoose.startSession();
+  session.startTransaction();
+  try {
+    const newRecipe = new Recipe({
+      recipeId: randomBytes(16).toString("hex"),
+      name,
+      ingredientsRequired,
+      steps,
+      servings,
+      category: category.toUpperCase(),
+      tags: tags ?? [],
+    });
+
+    await incrementIngredientCountsFor(ingredientsRequired);
+  
+    const savedRecipe = await newRecipe.save();
+    await session.commitTransaction();
+
+    return savedRecipe;
+  } catch (error) {
+    logger.error("Error while adding new recipe: %s", error);
+    throw error;
+  } finally {
+    session.endSession();
+  }
 };
 
 const getRecipe = async (name) => {
@@ -104,6 +142,20 @@ const getRecipe = async (name) => {
 const getRecipeCategoriesAndLabels = async () => {
   return supportedRecipeCategoriesAndLabel;
 };
+
+const decrementIngredientCountsFor = async (ingredients) => {
+  await Ingredient.updateMany(
+    { ingredientId: { $in: ingredients.map((ingredient) => ingredient.id) } },
+    { $inc: { countOfRecipesUsedIn: -1 } }
+  );
+}
+
+const incrementIngredientCountsFor = async (ingredients) => {
+  await Ingredient.updateMany(
+    { ingredientId: { $in: ingredients.map((ingredient) => ingredient.id) } },
+    { $inc: { countOfRecipesUsedIn: 1 } },
+  );
+}
 
 export {
   addNewIngredient,
