@@ -1,0 +1,21 @@
+<div class="add-edit-ingredient-form">
+    <mat-form-field appearance="outline">
+        <mat-label>Ingredient name</mat-label>
+        <input matInput [formControl]="ingredientForm.controls.name"/>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+        <mat-label>Category</mat-label>
+        <mat-select [formControl]="ingredientForm.controls.category">
+        @if((supportedCategories | async); as supportedCategories) {
+            @for(category of supportedCategories; track category) {
+                <mat-option [value]="category">{{category}}</mat-option>
+            }
+        }
+        </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+        <mat-label>Tags ( comma seperated )</mat-label>
+        <textarea matInput [formControl]="ingredientForm.controls.tags"></textarea>
+    </mat-form-field>
+    <button mat-flat-button class="ingredient-add-button" (click)="addIngredient()">Add ingredient</button>
+</div>

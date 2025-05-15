@@ -5,6 +5,7 @@ import { RecipeService } from '../services/recipe-service';
 import { Observable, switchMap, tap } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { IngredientService } from '../services/ingredient-services';
+import { request } from 'http';
 
 interface State {
   recipesLoaded: Recipe[];
@@ -93,6 +94,21 @@ export class PrimaryDataStore extends ComponentStore<State> {
       tap((response: Ingredient[]) => {
         if (response.length > 0) {
           this.setIngredientsLoaded(response);
+        }
+      })
+    )
+  );
+
+  readonly addNewIngredient = this.effect((request: Observable<Ingredient>) =>
+    request.pipe(
+      switchMap((ingredient: Ingredient) => {
+        return this.ingredientService.addIngredient(ingredient);
+      }),
+      tap((response: Ingredient[]) => {
+        if (response.length > 0) {
+          this.snackbar.open('Ingredient added successfully', 'Ok', {
+            duration: 2000,
+          });
         }
       })
     )

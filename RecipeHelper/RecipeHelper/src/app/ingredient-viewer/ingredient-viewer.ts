@@ -17,6 +17,11 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDivider } from '@angular/material/divider';
 import { PrimaryDataStore } from '../data-store/primary-data-store';
+import { MatFormField } from '@angular/material/select';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatInputModule } from '@angular/material/input';
+import { MatDialog } from '@angular/material/dialog';
+import { IngredientFormDialog } from './ingredient-form-dialog/ingredient-form-dialog';
 
 @Component({
   selector: 'ingredient-viewer',
@@ -25,6 +30,8 @@ import { PrimaryDataStore } from '../data-store/primary-data-store';
     AsyncPipe,
     MatDivider,
     IngredientCard,
+    MatInputModule,
+    ReactiveFormsModule,
     MatButtonModule,
     MatCardModule,
     MatChipsModule,
@@ -37,6 +44,7 @@ import { PrimaryDataStore } from '../data-store/primary-data-store';
 })
 export class IngredientViewer implements OnInit {
   dataStore = inject(PrimaryDataStore);
+  dialog = inject(MatDialog);
 
   ngOnInit(): void {
     this.dataStore.loadAllIngredients({});
@@ -47,9 +55,13 @@ export class IngredientViewer implements OnInit {
   showIngredients: Observable<Ingredient[]> = this.allIngredients.pipe(
     map((ingredients) =>
       ingredients.sort((a, b) =>
-        a.countOfRecipesUsedIn > b.countOfRecipesUsedIn ? -1 : 1
+        a.countOfRecipesUsedIn! > b.countOfRecipesUsedIn! ? -1 : 1
       )
     ),
     map((ingredients) => ingredients.slice(0, 5))
   );
+
+  addNewIngredient() {
+    this.dialog.open(IngredientFormDialog);
+  }
 }

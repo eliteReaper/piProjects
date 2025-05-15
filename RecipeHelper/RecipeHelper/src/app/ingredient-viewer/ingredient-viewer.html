@@ -2,15 +2,32 @@
     <h3>Most Used Ingredients</h3>
     <div class="ingredient-viewer-gallery">
         @if(showIngredients | async; as ingredients) {
-            @for(ingredient of ingredients; track ingredient) {
+            @for(ingredient of ingredients; track $index) {
                 <ingredient-card 
                     ingredientId="{{ingredient.ingredientId}}"
                     name="{{ingredient.name}}" 
                     category="{{ingredient.category}}"
                     [tags]="ingredient.tags || []"
-                    [countOfRecipesUsedIn]="ingredient.countOfRecipesUsedIn"
+                    [countOfRecipesUsedIn]="ingredient.countOfRecipesUsedIn!"
                 ></ingredient-card>
             }
+            <div class="ingredient-action-buttons">
+                <div>
+                    <button 
+                        mat-flat-button 
+                        (click)="addNewIngredient()"
+                        class="add-new-ingredients-button">
+                            Add new Ingredient
+                    </button>
+                </div>
+                <div>
+                    <button 
+                        mat-flat-button 
+                        class="view-all-ingredients-button">
+                            View All Ingredients
+                    </button>
+                </div>
+            </div>
         } @else {
             <p>Loading ingredients...</p>
         }

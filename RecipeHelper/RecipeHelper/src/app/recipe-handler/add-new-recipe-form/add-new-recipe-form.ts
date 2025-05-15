@@ -147,7 +147,7 @@ export class AddNewRecipeForm implements OnInit {
     this.ingredientSerivce.getAllIngredients().pipe(
       map((ingredients) =>
         ingredients.map((ingredient) => {
-          return { id: ingredient.ingredientId, label: ingredient.name };
+          return { id: ingredient.ingredientId!, label: ingredient.name };
         })
       )
     );

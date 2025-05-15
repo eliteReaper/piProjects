@@ -12,17 +12,19 @@ import { logger } from "../../shared/logger.mjs";
 
 // -------------------- Ingredient Services ------------------------
 const addNewIngredient = async (name, category, tags) => {
-  if (supportedIngredientCategories.findIndex(category.toUpperCase()) === -1) {
-    throw new Error("Category not supported.");
-  }
   const newIngredient = new Ingredient({
     ingredientId: randomBytes(16).toString("hex"),
     name,
     category: category.toUpperCase(),
     tags: tags ?? [],
   });
+
   return await newIngredient.save();
 };
+
+const getSupportedIngredientCategories = async () => {
+  return supportedIngredientCategories;
+}
 
 const getIngredients = async (id, name) => {
   if (id) {
@@ -166,4 +168,5 @@ export {
   getRecipeCategoriesAndLabels,
   updateRecipe,
   removeRecipe,
+  getSupportedIngredientCategories,
 };

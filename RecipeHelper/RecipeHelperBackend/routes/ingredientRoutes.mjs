@@ -4,22 +4,24 @@ import {
   getIngredients,
   addNewIngredient,
   seedAllIngredients,
+  getSupportedIngredientCategories,
 } from "./services/recipeHelperServices.mjs";
 import { logger } from "../shared/logger.mjs";
 import { ingredientsToBeSeeded } from "../seeder/ingredientSeeder.mjs";
 
 const ingredientRouter = express.Router();
 
-ingredientRouter.post("/addNewIngredient", async (req, res, next) => {
+ingredientRouter.post("/addIngredient", async (req, res, next) => {
   try {
     const { name, category, tags } = req.body;
+
     if (!name || !category) {
       return BadRequest(res, "Name & Category is required.");
     }
 
     const newIngredientAdded = await addNewIngredient(name, category, tags);
 
-    return Success(res, newIngredientAdded, "New ingredient added.");
+    return Success(res, [newIngredientAdded], "New ingredient added.");
   } catch (err) {
     logger.error("Something went wrong %s", err);
     return SomethingWentWrong(res);
@@ -33,6 +35,17 @@ ingredientRouter.post("/getIngredient", async (req, res, next) => {
     const ingredientsFetched = await getIngredients(id, name);
     
     return Success(res, ingredientsFetched, "Fetched Ingredients.");
+  } catch (err) {
+    logger.error("Something went wrong %s", err);
+    return SomethingWentWrong(res);
+  }
+});
+
+ingredientRouter.post("/getSupportedIngredientCategories", async (req, res, next) => {
+  try {
+    const categoriesSupported = await getSupportedIngredientCategories();
+    
+    return Success(res, categoriesSupported, "Fetched supported ingredient categories.");
   } catch (err) {
     logger.error("Something went wrong %s", err);
     return SomethingWentWrong(res);

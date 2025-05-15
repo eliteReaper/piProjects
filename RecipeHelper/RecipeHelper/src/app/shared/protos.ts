@@ -1,8 +1,8 @@
 export interface Ingredient {
-  ingredientId: string;
+  ingredientId?: string;
   name: string;
   category: string;
-  countOfRecipesUsedIn: number;
+  countOfRecipesUsedIn?: number;
   tags?: string[];
 }
 
