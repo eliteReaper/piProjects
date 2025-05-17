@@ -25,6 +25,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 enum ScreenSize {
   XSMALL = 1,
@@ -48,6 +49,7 @@ enum ScreenSize {
     MatInputModule,
     MatFormFieldModule,
     ReactiveFormsModule,
+    MatProgressSpinnerModule,
   ],
   templateUrl: './recipe-gallery.html',
   styleUrl: './recipe-gallery.scss',
@@ -100,8 +102,10 @@ export class RecipeGallery implements OnInit {
         return 1;
       case ScreenSize.MEDIUM:
         return 2;
-      default:
+      case ScreenSize.LARGE:
         return 2;
+      default:
+        return 3;
     }
   });
 

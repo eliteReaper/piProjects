@@ -33,7 +33,12 @@ import {
   tap,
 } from 'rxjs';
 import { RecipeService } from '../../services/recipe-service';
-import { CategoryAndLabel, Ingredient, Recipe } from '../../shared/protos';
+import {
+  CategoryAndLabel,
+  Ingredient,
+  LoadingStateType,
+  Recipe,
+} from '../../shared/protos';
 import { AsyncPipe } from '@angular/common';
 import { IngredientService } from '../../services/ingredient-services';
 import {
@@ -43,6 +48,7 @@ import {
 import { MatChipInputEvent, MatChipsModule } from '@angular/material/chips';
 import { toObservable } from '@angular/core/rxjs-interop';
 import { PrimaryDataStore } from '../../data-store/primary-data-store';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 interface IngredientIdLabel {
   id: string;
@@ -74,6 +80,7 @@ interface NewRecipeFormControl {
     MatSelectModule,
     MatInputModule,
     MatFormFieldModule,
+    MatProgressSpinnerModule,
   ],
   templateUrl: './add-new-recipe-form.html',
   styleUrl: './add-new-recipe-form.scss',
@@ -110,6 +117,16 @@ export class AddNewRecipeForm implements OnInit {
   private recipeService = inject(RecipeService);
   private ingredientSerivce: IngredientService = inject(IngredientService);
 
+  loadingState = this.dataStore.loadingState;
+  isAddOrEditLoading = this.loadingState.pipe(
+    map((loadingState) => {
+      return (
+        loadingState === LoadingStateType.LOADING_RECIPE_ADD ||
+        loadingState === LoadingStateType.LOADING_RECIPE_EDIT
+      );
+    })
+  );
+
   protected readonly separatorKeysCodes: number[] = [ENTER, COMMA];
 
   protected newRecipeForm: FormGroup<NewRecipeFormControl> =
@@ -118,13 +135,8 @@ export class AddNewRecipeForm implements OnInit {
         nonNullable: true,
         validators: [Validators.required],
       }),
-      ingredient: new FormControl<string>('', {
-        nonNullable: true,
-        validators: [Validators.required],
-      }),
-      ingredientQuantity: new FormArray<FormControl<string>>([], {
-        validators: [Validators.required],
-      }),
+      ingredient: new FormControl<string>('', { nonNullable: true }),
+      ingredientQuantity: new FormArray<FormControl<string>>([]),
       steps: new FormControl<string>('', {
         nonNullable: true,
         validators: [Validators.required],
@@ -203,7 +215,7 @@ export class AddNewRecipeForm implements OnInit {
       },
     ]);
     this.newRecipeForm.controls.ingredientQuantity.push(
-      new FormControl<string>('0', {
+      new FormControl<string>('0 tbsp', {
         nonNullable: true,
         validators: [Validators.required],
       })
@@ -250,6 +262,16 @@ export class AddNewRecipeForm implements OnInit {
   }
 
   addNewRecipe() {
+    if (
+      !this.newRecipeForm.controls.name.value ||
+      !this.newRecipeForm.controls.category.value ||
+      !this.newRecipeForm.controls.steps.value ||
+      this.newRecipeForm.controls.ingredientQuantity.length === 0 ||
+      !this.newRecipeForm.controls.servings.value
+    ) {
+      this.newRecipeForm.markAllAsTouched();
+      return;
+    }
     const newRecipe: Recipe = {
       name: this.newRecipeForm.controls.name.value,
       ingredientsRequired: this.ingredientsSelected().map((ingredient) => {
@@ -287,8 +309,6 @@ export class AddNewRecipeForm implements OnInit {
       this.dataStore.addNewRecipe(newRecipe);
       this.newRecipeForm.reset();
       this.ingredientsSelected.set([]);
-      // TODO: Only collapse when there are no form errors.
-      // this.newRecipeForm.controls.name.hasError('required') like so.
       this.onAddCollapseForm.emit();
     }
   }

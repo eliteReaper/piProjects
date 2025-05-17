@@ -1,9 +1,12 @@
 <div class="add-new-recipe-form">
-    <mat-form-field>
+    <mat-form-field appearance="outline">
         <mat-label>Recipe name</mat-label>
         <input matInput [formControl]="newRecipeForm.controls.name" />
+        @if(newRecipeForm.get('name')?.hasError('required')) {
+            <mat-error>Recipe Name is required.</mat-error>
+        }
     </mat-form-field>
-    <mat-form-field>
+    <mat-form-field appearance="outline">
         <mat-label>Ingredients</mat-label>
         <mat-chip-grid #chipGrid>
             @for (ingredient of ingredientsSelected(); track $index) {
@@ -47,11 +50,14 @@
                 </mat-form-field>
             }
     }
-    <mat-form-field>
+    <mat-form-field appearance="outline">
         <mat-label>Servings</mat-label>
         <input matInput [formControl]="newRecipeForm.controls.servings"/>
+        @if(newRecipeForm.get('servings')?.hasError('required')) {
+            <mat-error>Serving size is required.</mat-error>
+        }
     </mat-form-field>
-    <mat-form-field>
+    <mat-form-field appearance="outline">
         <mat-label>Category</mat-label>
         <mat-select [formControl]="newRecipeForm.controls.category">
         @if((recipeCategoriesAndLabels | async); as recipeCategoriesAndLabels) {
@@ -60,16 +66,26 @@
             }
         }
         </mat-select>
+        @if(newRecipeForm.get('category')?.hasError('required')) {
+            <mat-error>Category is required.</mat-error>
+        }
     </mat-form-field>
-    <mat-form-field>
+    <mat-form-field appearance="outline">
         <mat-label>Steps to follow</mat-label>
         <textarea matInput [formControl]="newRecipeForm.controls.steps"></textarea>
+        @if(newRecipeForm.get('steps')?.hasError('required')) {
+            <mat-error>Steps to follow is required.</mat-error>
+        }
     </mat-form-field>
-    <mat-form-field>
+    <mat-form-field appearance="outline">
         <mat-label>Tags (comma seperated)</mat-label>
         <input matInput [formControl]="newRecipeForm.controls.tags"/>
     </mat-form-field>
-    <button mat-flat-button (click)="addNewRecipe()">
-        {{isEditMode() ? 'Edit' : 'Add'}} Recipe
-    </button>
+    @if((isAddOrEditLoading|async) ?? true) {
+        <mat-spinner [diameter]="50"></mat-spinner>
+    } @else {
+        <button mat-flat-button (click)="addNewRecipe()">
+            {{isEditMode() ? 'Edit' : 'Add'}} Recipe
+        </button>
+    }
 </div>

@@ -9,13 +9,11 @@ import { Ingredient, ServerResponse, GetIngredientRequest } from '../shared/prot
 export class IngredientService {
   private httpClient = inject(HttpClient);
 
-  addIngredient(ingredient: Ingredient): Observable<Ingredient[]> {
-    console.log(ingredient);
+  addEditIngredient(ingredient: Ingredient): Observable<Ingredient[]> {
     return this.httpClient
-      .post<ServerResponse<Ingredient[]>>('http://localhost:3000/addIngredient', {...ingredient})
+      .post<ServerResponse<Ingredient[]>>('http://localhost:3000/addIngredient', ingredient)
       .pipe(
         map((res: ServerResponse<Ingredient[]>) => {
-          console.log(" hi there");
           return res.payload;
         }),
         catchError((err: HttpErrorResponse) => {

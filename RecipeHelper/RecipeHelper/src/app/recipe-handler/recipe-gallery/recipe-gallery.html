@@ -6,7 +6,7 @@
 </mat-form-field>
 @if((filteredRecipes | async) ?? false; as filteredRecipes) {
     @if(filteredRecipes.length > 0) { 
-        <mat-grid-list [cols]="gridColsSignal()" [rowHeight]="rowHeightSignal()" gutterSize="0.2rem">
+        <mat-grid-list class="recipe-card-grid" [cols]="gridColsSignal()" [rowHeight]="rowHeightSignal()" gutterSize="0.2rem">
             @for(recipe of filteredRecipes; track recipe) {
                 <mat-grid-tile
                     class="recipe-card-grid-tile">
@@ -20,5 +20,7 @@
         <p>So empty, please add some recipes.</p>
     }
 } @else {
-    <p>Loading Recipes...</p>
+    <div class="loading-recipes-spinner">
+        <mat-spinner diameter="50"></mat-spinner> <p>Loading Recipes...</p>
+    </div>
 }

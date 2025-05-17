@@ -4,16 +4,28 @@
         <div>        
             <h3>Recipe Gallery</h3>
             @if(panelOpenState()) {
-                <!-- TODO: Use Mat List here. -->
-                <p>Instructions for adding a recipe: </p>
-                <ul>
-                    <li>Fill in the recipe name</li>
-                    <li>Fill in the ingredients and their quantities. Supported units are g, tbsp, tsp, cup and ml.</li>
-                    <li>Fill in the number of servings</li>
-                    <li>Fill in the category.</li>
-                    <li>Fill in the steps.</li>
-                    <li>Click on "Add Recipe".</li>
-                </ul>
+                <mat-selection-list #stepsComplete>    
+                    <div mat-subheader><strong>Instructions for adding a recipe: </strong></div>
+                    <div mat-subheader>Checklist item completed: {{stepsComplete.selectedOptions.selected.length}}</div>
+                    <mat-list-option>
+                        Fill in the recipe name.
+                    </mat-list-option>
+                    <mat-list-option>
+                        Fill in the ingredients and their quantities. Supported units are g, tbsp, tsp, cup and ml.
+                    </mat-list-option>
+                    <mat-list-option>
+                        Fill in the serving size.
+                    </mat-list-option>
+                    <mat-list-option>
+                        Fill in the category.
+                    </mat-list-option>
+                    <mat-list-option>
+                        Fill in the steps.
+                    </mat-list-option>
+                    <mat-list-option>
+                        Click on "Add Recipe".
+                    </mat-list-option>
+                </mat-selection-list>
             }
         </div>
         <div class="add-new-recipe">

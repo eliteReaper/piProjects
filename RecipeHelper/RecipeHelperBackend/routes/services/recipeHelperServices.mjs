@@ -11,7 +11,21 @@ import mongoose from "mongoose";
 import { logger } from "../../shared/logger.mjs";
 
 // -------------------- Ingredient Services ------------------------
-const addNewIngredient = async (name, category, tags) => {
+const addNewIngredient = async (ingredientId, name, category, tags) => {
+  if (ingredientId) {
+    // Update Ingredient.
+
+    return Ingredient.findOneAndUpdate(
+      { ingredientId },
+      {
+        name,
+        category,
+        tags: tags ?? [],
+      }
+    );
+  }
+
+  // Create ingredient.
   const newIngredient = new Ingredient({
     ingredientId: randomBytes(16).toString("hex"),
     name,
@@ -24,7 +38,7 @@ const addNewIngredient = async (name, category, tags) => {
 
 const getSupportedIngredientCategories = async () => {
   return supportedIngredientCategories;
-}
+};
 
 const getIngredients = async (id, name) => {
   if (id) {
@@ -50,7 +64,7 @@ const seedAllIngredients = async (ingredients) => {
 
 // -------------------- Recipe Services ------------------------
 const removeRecipe = async (recipeId) => {
-  return await Recipe.findOneAndDelete( {recipeId} );
+  return await Recipe.findOneAndDelete({ recipeId });
 };
 
 const updateRecipe = async (
@@ -121,7 +135,7 @@ const addNewRecipe = async (
     });
 
     await incrementIngredientCountsFor(ingredientsRequired);
-  
+
     const savedRecipe = await newRecipe.save();
     await session.commitTransaction();
 
@@ -150,14 +164,14 @@ const decrementIngredientCountsFor = async (ingredients) => {
     { ingredientId: { $in: ingredients.map((ingredient) => ingredient.id) } },
     { $inc: { countOfRecipesUsedIn: -1 } }
   );
-}
+};
 
 const incrementIngredientCountsFor = async (ingredients) => {
   await Ingredient.updateMany(
     { ingredientId: { $in: ingredients.map((ingredient) => ingredient.id) } },
-    { $inc: { countOfRecipesUsedIn: 1 } },
+    { $inc: { countOfRecipesUsedIn: 1 } }
   );
-}
+};
 
 export {
   addNewIngredient,

@@ -10,7 +10,6 @@ import {
 } from '@angular/material/dialog';
 import { Ingredient } from '../../shared/protos';
 import { AddEditIngredientForm } from '../add-edit-ingredient-form/add-edit-ingredient-form';
-import { AddNewRecipeForm } from "../../recipe-handler/add-new-recipe-form/add-new-recipe-form";
 
 @Component({
   selector: 'ingredient-form-dialog',

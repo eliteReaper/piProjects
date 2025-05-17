@@ -1,6 +1,13 @@
 <mat-card class="ingredient-card" appearance="outlined">
   <mat-card-header>
-    <mat-card-title>{{name()}}</mat-card-title>
+    <mat-card-title>
+      <div>
+        {{name()}}
+        @if(this.editAllowed()) {
+          <button mat-icon-button (click)="editIngredient()"><mat-icon>edit</mat-icon></button>
+        }
+      </div>
+    </mat-card-title>
     <mat-card-subtitle>{{countOfRecipesUsedIn()}} recipes use it</mat-card-subtitle>
   </mat-card-header>
   <mat-card-footer class="ingredient-card-footer">

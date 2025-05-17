@@ -14,6 +14,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { RecipeGallery } from './recipe-gallery/recipe-gallery';
 import { MatDividerModule } from '@angular/material/divider';
 import { PrimaryDataStore } from '../data-store/primary-data-store';
+import { MatListModule } from '@angular/material/list';
 
 @Component({
   selector: 'recipe-handler',
@@ -28,6 +29,7 @@ import { PrimaryDataStore } from '../data-store/primary-data-store';
     MatFormFieldModule,
     AddNewRecipeForm,
     RecipeGallery,
+    MatListModule,
   ],
   templateUrl: './recipe-handler.html',
   styleUrl: './recipe-handler.scss',

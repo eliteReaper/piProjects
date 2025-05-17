@@ -13,13 +13,13 @@ const ingredientRouter = express.Router();
 
 ingredientRouter.post("/addIngredient", async (req, res, next) => {
   try {
-    const { name, category, tags } = req.body;
+    const { ingredientId,  name, category, tags } = req.body;
 
     if (!name || !category) {
       return BadRequest(res, "Name & Category is required.");
     }
 
-    const newIngredientAdded = await addNewIngredient(name, category, tags);
+    const newIngredientAdded = await addNewIngredient(ingredientId, name, category, tags);
 
     return Success(res, [newIngredientAdded], "New ingredient added.");
   } catch (err) {

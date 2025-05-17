@@ -1,3 +1,14 @@
+export enum LoadingStateType {
+  IDLE,
+  LOADING_INGREDIENT_EDIT,
+  LOADING_INGREDIENT_ADD_EDIT,
+  LOADING_INGREDIENT_LIST,
+  LOADING_RECIPES_LIST,
+  LOADING_RECIPE_EDIT,
+  LOADING_RECIPE_ADD,
+  LOADING_RECIPE_DELETE
+};
+
 export interface Ingredient {
   ingredientId?: string;
   name: string;

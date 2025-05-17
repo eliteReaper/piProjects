@@ -1,7 +1,22 @@
 <div class="ingredient-viewer">
-    <h3>Most Used Ingredients</h3>
+    @if(this.showAllIngredients()) {
+        <div class="expanded-ingredient-list-header">  
+            <h3>All Ingredients</h3>
+            <button 
+                mat-flat-button
+                (click)="toggleShowAllIngredients()">
+                    Show Less
+            </button>
+        </div>
+        <mat-form-field appearance="outline">
+            <mat-label>Search Ingredients</mat-label>
+            <input matInput [formControl]="ingredientSearch"/>
+        </mat-form-field>
+    } @else {
+        <h3 style="padding:1rem">Most Used Ingredients</h3>
+    }
     <div class="ingredient-viewer-gallery">
-        @if(showIngredients | async; as ingredients) {
+        @if(showIngredients(); as ingredients) {
             @for(ingredient of ingredients; track $index) {
                 <ingredient-card 
                     ingredientId="{{ingredient.ingredientId}}"
@@ -9,6 +24,7 @@
                     category="{{ingredient.category}}"
                     [tags]="ingredient.tags || []"
                     [countOfRecipesUsedIn]="ingredient.countOfRecipesUsedIn!"
+                    [editAllowed]="this.showAllIngredients()"
                 ></ingredient-card>
             }
             <div class="ingredient-action-buttons">
@@ -23,13 +39,20 @@
                 <div>
                     <button 
                         mat-flat-button 
-                        class="view-all-ingredients-button">
-                            View All Ingredients
+                        class="view-all-ingredients-button"
+                        (click)="toggleShowAllIngredients()">
+                        @if(this.showAllIngredients()) {
+                            Show Less
+                        }  @else { 
+                            View/Edit All Ingredients
+                        }  
                     </button>
                 </div>
             </div>
         } @else {
-            <p>Loading ingredients...</p>
+         <div class="loading-ingredient-spinner">
+            <mat-spinner diameter="50"></mat-spinner> <p>Loading Ingredients...</p>
+         </div>
         }
     </div>
     <mat-divider></mat-divider>
