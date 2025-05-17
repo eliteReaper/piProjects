@@ -36,7 +36,7 @@
     </mat-form-field>
     @if(ingredientsSelected().length > 0) {
             @for(ingredient of ingredientsSelected(); track $index) {
-                <mat-form-field class="ingredient-input">
+                <mat-form-field class="ingredient-input" appearance="outline">
                     <mat-label>{{ingredient.label}} Quantity</mat-label>
                     <input 
                         matInput

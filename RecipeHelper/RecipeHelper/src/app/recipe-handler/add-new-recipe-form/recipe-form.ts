@@ -67,7 +67,7 @@ interface NewRecipeFormControl {
 }
 
 @Component({
-  selector: 'add-new-recipe-form',
+  selector: 'recipe-form',
   standalone: true,
   imports: [
     AsyncPipe,
@@ -82,11 +82,11 @@ interface NewRecipeFormControl {
     MatFormFieldModule,
     MatProgressSpinnerModule,
   ],
-  templateUrl: './add-new-recipe-form.html',
-  styleUrl: './add-new-recipe-form.scss',
+  templateUrl: './recipe-form.html',
+  styleUrl: './recipe-form.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 }) // TODO: Change name of AddNewRecipeForm to something that encapsulate both add and edit recipe form.
-export class AddNewRecipeForm implements OnInit {
+export class RecipeForm implements OnInit {
   recipe = input<Recipe>();
   isEditMode = model<boolean>(false);
   onEditClose = output<void>();

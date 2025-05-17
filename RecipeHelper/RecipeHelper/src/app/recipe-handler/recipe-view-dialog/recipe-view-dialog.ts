@@ -9,7 +9,7 @@ import {
   MatDialogRef,
 } from '@angular/material/dialog';
 import { Recipe } from '../../shared/protos';
-import { AddNewRecipeForm } from '../add-new-recipe-form/add-new-recipe-form';
+import { RecipeForm } from '../add-new-recipe-form/recipe-form';
 import { REACTIVE_NODE } from '@angular/core/primitives/signals';
 
 @Component({
@@ -21,7 +21,7 @@ import { REACTIVE_NODE } from '@angular/core/primitives/signals';
     MatDialogActions,
     MatDialogClose,
     MatButtonModule,
-    AddNewRecipeForm,
+    RecipeForm,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
